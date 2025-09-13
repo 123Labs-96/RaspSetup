@@ -18,9 +18,8 @@ Future versions will include a full app for enhanced management and customizatio
 ## 📥 Installation
 Clone this repository and run the script:
 
-1: git clone https://github.com/YourUser/RaspScript.git
-2: cd RaspScript
-3: chmod +x rasp-script.sh
-4: ./rasp-script.sh
-
-----------------------------------------------------------------Orwae Enterprise LLC X 123Labs-96-------------------------------------------------------------------
+```bash
+git clone https://github.com/YourUser/RaspScript.git
+cd RaspScript
+chmod +x rasp-script.sh
+./rasp-script.sh
