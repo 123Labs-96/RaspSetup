@@ -23,10 +23,7 @@ git clone https://github.com/123Labs-96/RaspSetup.git
 cd RaspSetup
 sudo chmod +x raspsetup.sh
 ./rasp-script.sh
-
----
-
-## NOTICE
-
-RaspSetup will run as sudo/root and change system settings. Use at your own risk (recommend run as root or sudo)
+```markdown
+## ⚠️ NOTICE
+RaspSetup will run as root and change system settings. Use at your own risk (recommend run as sudo/root premision)
 
