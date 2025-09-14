@@ -1,17 +1,18 @@
 # RaspSetup
 
 **RaspSetup** is a lightweight automation tool for **Raspberry Pi OS**, developed by **Orwae Enterprise LLC**.  
-It updates your system, installs essentials, and offers a **Whiptail TUI** for simple setup.  
+It updates your system, installs essentials, and offers a **Whiptail UI** for simple setup.  
 Future versions will include a full app for enhanced management and customization.  
 
 ---
 
-## ✨ Features
+## ✨ Key Features
 - Support-update Raspberry Pi OS  
-- Install essential tools (Sysbench, Stress-ng, Neofetch, Pi Apps, RealVNC)  
-- Interactive setup via Whiptail GUI  
+- Install essential tools (Sysbench, Stress-ng...)  
+- Interactive setup via Whiptail UI  
 - Reboot & configuration options (SSH/VNC via raspi-config)  
-- Lightweight, fast, and beginner-friendly  
+- Lightweight, fast, and beginner-friendly
+- Mainly support for Raspberry Pi and Raspberry Pi OS
 
 ---
 
