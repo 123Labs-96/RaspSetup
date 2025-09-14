@@ -2,7 +2,8 @@
 
 **RaspSetup** is a lightweight automation tool for **Raspberry Pi OS**, developed by **Orwae Enterprise LLC**.  
 It updates your system, installs essentials, and offers a **Whiptail UI** for simple setup.  
-Future versions will include a full app for enhanced management and customization.  
+Future versions will include a full app for enhanced management and customization. 
+Anyone can download, modify, and use RaspSetup. We welcome contributions.
 
 ---
 
@@ -28,5 +29,6 @@ sudo chmod +x raspsetup.sh
 ---
 
 ## ⚠️ NOTICE
-RaspSetup will run as root and change system settings. Use at your own risk (recommend run as sudo/root premision)
+RaspSetup will run as root and change system settings. Use at your own risk 
+Recommend run as sudo/root premision
 
