@@ -7,7 +7,7 @@ Future versions will include a full app for enhanced management and customizatio
 ---
 
 ## ✨ Features
-- Auto-update Raspberry Pi OS  
+- Support-update Raspberry Pi OS  
 - Install essential tools (Sysbench, Stress-ng, Neofetch, Pi Apps, RealVNC)  
 - Interactive setup via Whiptail GUI  
 - Reboot & configuration options (SSH/VNC via raspi-config)  
