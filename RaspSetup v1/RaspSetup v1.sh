@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # RaspSetup v1 by Orwae Enterprise LLC
-TITLE="RaspSetup Menu v1"
-BACKTITLE="Orwae Enterprise LLC | RaspSetup v1"
+TITLE="RaspSetup v1 beta"
+BACKTITLE="Orwae Enterprise LLC | RaspSetup v1 beta"
 
 # --- Progress bar: Initializing ---
 {
