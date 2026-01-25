@@ -1,0 +1,195 @@
+#!/bin/bash
+# RaspSetup v1
+TITLE="RaspSetup by Orwae"
+BACKTITLE="Orwae Enterprise LLC | RaspSetup v1"
+
+# --- Hàm: Kiểm tra và sửa lỗi dpkg ---
+fix_dpkg() {
+    echo "--- Checking for dpkg issues and attempting to fix them... ---"
+    if sudo dpkg --configure -a; then
+        echo "dpkg configuration completed successfully or no issues found."
+        return 0
+    else
+        echo "Error: dpkg configuration failed. Please run 'sudo dpkg --configure -a' manually and fix any issues before proceeding." >&2
+        return 1
+    fi
+}
+
+# --- Progress bar: Initializing ---
+{
+    echo 10; sleep 0.5
+    echo 30; sleep 0.5
+    echo 60; sleep 0.5
+    echo 100; sleep 0.5
+} | whiptail --title "$TITLE" --backtitle "$BACKTITLE" --gauge "Initializing script..." 6 60 0
+
+# --- Check & install whiptail if not available ---
+if ! command -v whiptail >/dev/null 2>&1; then
+    echo "Installing whiptail..." >/dev/null
+    # Cố gắng sửa dpkg trước khi cài whiptail
+    if ! fix_dpkg; then
+        whiptail --title "$TITLE" --backtitle "$BACKTITLE" --msgbox "dpkg is in a broken state. Cannot install whiptail. Exiting." 10 60
+        exit 1
+    fi
+    sudo apt-get install -y whiptail >/dev/null 2>&1 || {
+        whiptail --title "$TITLE" --backtitle "$BACKTITLE" --msgbox "Failed to install whiptail. Exiting." 10 60
+        exit 1
+    }
+fi
+
+# --- Detect OS + Board Info ---
+OS_INFO=$(lsb_release -d 2>/dev/null | awk -F"\t" '{print $2}' || echo "N/A")
+BOARD_INFO=$(cat /proc/device-tree/model 2>/dev/null || echo "N/A")
+
+# --- Step 1: Update ---
+if (whiptail --title "$TITLE" --backtitle "$BACKTITLE" --yesno "System: $OS_INFO
+Device: $BOARD_INFO
+Do you want to update and upgrade the system now?" 15 60); then
+    # Cố gắng sửa dpkg trước khi cập nhật hệ thống
+    if ! fix_dpkg; then
+        whiptail --title "$TITLE" --backtitle "$BACKTITLE" --msgbox "dpkg is in a broken state. Cannot proceed with system update. Please fix dpkg manually first." 10 60
+    else
+        {
+            echo 20
+            sudo apt update >/dev/null 2>&1
+            echo 60
+            sudo apt upgrade -y >/dev/null 2>&1
+            echo 100
+        } | whiptail --title "$TITLE" --backtitle "$BACKTITLE" --gauge "Updating system..." 6 60 0
+    fi
+fi
+
+# --- Step 2: Install Apps ---
+OPTIONS=(
+    1 "Sysbench" OFF
+    2 "Stress-ng" OFF
+    3 "Neofetch" OFF
+    4 "Pi-Apps" OFF
+    5 "RealVNC" OFF
+)
+
+CHOICES=$(whiptail --title "$TITLE" --backtitle "$BACKTITLE" --checklist \
+"Select applications to install (SPACE to select, ENTER to confirm):" 20 70 10 \
+"${OPTIONS[@]}" 3>&1 1>&2 2>&3)
+exitstatus=$?
+
+if [ $exitstatus = 0 ]; then
+    for choice in $CHOICES; do
+        case $choice in
+            "\"1\"")
+                if ! command -v sysbench >/dev/null 2>&1; then
+                    {
+                        echo 30
+                        sudo apt install -y sysbench >/dev/null 2>&1
+                        echo 100
+                    } | whiptail --title "$TITLE" --backtitle "$BACKTITLE" --gauge "Installing Sysbench..." 6 60 0
+                    whiptail --title "$TITLE" --backtitle "$BACKTITLE" --msgbox "Sysbench installed successfully." 10 60
+                else
+                    whiptail --title "$TITLE" --backtitle "$BACKTITLE" --msgbox "Sysbench is already installed." 10 60
+                fi
+                ;;
+            "\"2\"")
+                if ! command -v stress-ng >/dev/null 2>&1; then
+                    {
+                        echo 30
+                        sudo apt install -y stress-ng >/dev/null 2>&1
+                        echo 100
+                    } | whiptail --title "$TITLE" --backtitle "$BACKTITLE" --gauge "Installing Stress-ng..." 6 60 0
+                    whiptail --title "$TITLE" --backtitle "$BACKTITLE" --msgbox "Stress-ng installed successfully." 10 60
+                else
+                    whiptail --title "$TITLE" --backtitle "$BACKTITLE" --msgbox "Stress-ng is already installed." 10 60
+                fi
+                ;;
+            "\"3\"")
+                if ! command -v neofetch >/dev/null 2>&1; then
+                    {
+                        echo 30
+                        sudo apt install -y neofetch >/dev/null 2>&1
+                        echo 100
+                    } | whiptail --title "$TITLE" --backtitle "$BACKTITLE" --gauge "Installing Neofetch..." 6 60 0
+                    whiptail --title "$TITLE" --backtitle "$BACKTITLE" --msgbox "Neofetch installed successfully." 10 60
+                else
+                    whiptail --title "$TITLE" --backtitle "$BACKTITLE" --msgbox "Neofetch is already installed." 10 60
+                fi
+                ;;
+            "\"4\"")
+                if [ ! -d "$HOME/pi-apps" ]; then
+                    # Tải script vào tệp tạm để dễ quản lý
+                    local temp_script="$HOME/pi-apps-install-temp.sh"
+                    if ! wget -qO "$temp_script" https://raw.githubusercontent.com/Botspot/pi-apps/master/install; then
+                        whiptail --title "$TITLE" --backtitle "$BACKTITLE" --msgbox "Failed to download Pi-Apps install script." 10 60
+                        continue # Bỏ qua cài đặt này
+                    fi
+                    chmod +x "$temp_script"
+
+                    # Xác định người dùng thường để chạy script
+                    local regular_user
+                    if [ -n "$SUDO_USER" ]; then
+                        regular_user="$SUDO_USER"
+                    else
+                        regular_user="$(logname 2>/dev/null || echo "$USER")"
+                    fi
+
+                    # Kiểm tra xem người dùng có tồn tại không
+                    if ! id "$regular_user" >/dev/null 2>&1; then
+                        whiptail --title "$TITLE" --backtitle "$BACKTITLE" --msgbox "Cannot determine regular user account for Pi-Apps. Please run this script as a regular user." 10 60
+                        rm -f "$temp_script"
+                        continue # Bỏ qua cài đặt này
+                    fi
+
+                    {
+                        echo 30
+                        # Chạy script dưới quyền người dùng thường
+                        sudo -u "$regular_user" "$temp_script" >/dev/null 2>&1
+                        local install_result=$?
+                        if [ $install_result -eq 0 ]; then
+                            echo 100
+                        else
+                            # Nếu lỗi, vẫn báo lỗi nhưng tiếp tục vòng lặp
+                            whiptail --title "$TITLE" --backtitle "$BACKTITLE" --msgbox "Pi-Apps installation failed. Check logs." 10 60
+                        fi
+                        rm -f "$temp_script" # Dọn dẹp
+                    } | whiptail --title "$TITLE" --backtitle "$BACKTITLE" --gauge "Installing Pi-Apps..." 6 60 0
+
+                    if [ $install_result -eq 0 ]; then
+                        whiptail --title "$TITLE" --backtitle "$BACKTITLE" --msgbox "Pi-Apps installed successfully." 10 60
+                    fi
+                else
+                    whiptail --title "$TITLE" --backtitle "$BACKTITLE" --msgbox "Pi-Apps is already installed." 10 60
+                fi
+                ;;
+            "\"5\"")
+                if ! dpkg -l | grep -q realvnc-vnc-server; then
+                    {
+                        echo 30
+                        sudo apt install -y realvnc-vnc-server realvnc-vnc-viewer >/dev/null 2>&1
+                        echo 100
+                    } | whiptail --title "$TITLE" --backtitle "$BACKTITLE" --gauge "Installing RealVNC..." 6 60 0
+                    whiptail --title "$TITLE" --backtitle "$BACKTITLE" --msgbox "RealVNC installed successfully." 10 60
+                else
+                    whiptail --title "$TITLE" --backtitle "$BACKTITLE" --msgbox "RealVNC is already installed." 10 60
+                fi
+                ;;
+        esac
+    done
+fi
+
+# --- Step 3: Raspi-config ---
+if (whiptail --title "$TITLE" --backtitle "$BACKTITLE" --yesno "Do you want to open raspi-config to configure SSH/VNC?" 10 60); then
+    sudo raspi-config >/dev/null 2>&1
+fi
+
+# --- Step 4: Completed ---
+whiptail --title "$TITLE" --backtitle "$BACKTITLE" --msgbox "Installation Completed!
+Press OK to continue." 10 60
+
+# --- Step 5: Reboot? ---
+if (whiptail --title "$TITLE" --backtitle "$BACKTITLE" --yesno "Do you want to reboot the system now?" 10 60); then
+    whiptail --title "$TITLE" --backtitle "$BACKTITLE" --msgbox "System will reboot now..." 10 60
+    sudo reboot
+else
+    whiptail --title "$TITLE" --backtitle "$BACKTITLE" --msgbox "Exit script.
+You can reboot manually later." 10 60
+fi
+
+clear
