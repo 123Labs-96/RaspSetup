@@ -1,4 +1,4 @@
-### 🔹 RaspSetup v3 — *UX & Network Services Edition*
+### 🔹 RaspSetup v3 — CHANGELOG
 
 **Focus:** User experience, performance, and network services.
 
