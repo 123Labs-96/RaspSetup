@@ -1,7 +1,5 @@
 ### 🔹 RaspSetup v3 — CHANGELOG
 
-**Focus:** User experience, performance, and network services.
-
 #### New & Improved
 - Unified real-time progress handler
 - Cleaner and faster execution flow
