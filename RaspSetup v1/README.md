@@ -1,6 +1,4 @@
-### 🔹 RaspSetup v1 — *Foundation Release*
-
-**Focus:** Basic system setup and benchmarking tools.
+### 🔹 RaspSetup v1 — CHANGELOG
 
 #### Features
 - System information detection (OS & board model)
