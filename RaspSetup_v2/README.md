@@ -1,6 +1,4 @@
-### 🔹 RaspSetup v2 — *Server & Security Edition*
-
-**Focus:** Server management, security, and advanced control.
+### 🔹 RaspSetup v2 — CHANGELOG
 
 #### New & Improved
 - Fully modular function-based architecture
