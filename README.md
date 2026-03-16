@@ -37,7 +37,7 @@ With just a few commands, you can:
 ```bash
 # Step 1: Clone the repository
 git clone https://github.com/123Labs-96/RaspSetup.git
-cd RaspSetup
+cd RaspSetup_vX
 
 # Step 2: Make the script executable and run it
 sudo chmod +x install.sh
