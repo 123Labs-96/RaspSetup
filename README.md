@@ -40,5 +40,9 @@ git clone https://github.com/123Labs-96/RaspSetup.git
 cd RaspSetup
 
 # Step 2: Make the script executable and run it
-sudo chmod +x raspsetup.sh
-./raspsetup.sh
+sudo chmod +x install.sh
+./install.sh
+```
+or
+```bash
+bash install.sh
