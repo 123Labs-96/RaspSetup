@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# RaspSetup v4.8 by Orwae Enterprise LLC
+# RaspSetup v4 by Orwae Enterprise LLC
 #
 # This script provides an interactive, menu‑driven installer for a variety
 # of utilities and services on a Raspberry Pi.  It builds on previous
