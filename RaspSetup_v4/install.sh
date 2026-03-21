@@ -285,7 +285,7 @@ install_adguardhome() {
     show_header
     echo -e "${YELLOW}--- Installing AdGuard Home... ---${NC}"
     # Use the silent flag to prevent interactive prompts.
-    if curl -sS -L https://raw.githubusercontent.com/AdguardTeam/AdGuardHome/master/scripts/install.sh | sudo sh -s -- --silent; then
+    if curl -s -S -L https://raw.githubusercontent.com/AdguardTeam/AdGuardHome/master/scripts/install.sh | sh -s -- -v --silent; then
         msg_countdown "AdGuard Home"
     else
         msg_error "AdGuard Home" "Installation failed."
