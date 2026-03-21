@@ -173,7 +173,7 @@ install_filebrowser() {
         "2" "Full Install (Service + /FileBrowser/Data)" 3>&1 1>&2 2>&3)
     local exit_status=$?
     if [ ${exit_status} -ne 0 ]; then return 1; fi
-    local download_url="https://github.com/gtsteffaniak/filebrowser/releases/download/v1.0.3-stable/linux-arm64-filebrowser"
+    local download_url="https://github.com/gtsteffaniak/filebrowser/releases/download/v1.2.2-stable/linux-arm64-filebrowser"
     if [ "${FB_MODE}" == "1" ]; then
         echo -e "${YELLOW}--- Downloading FileBrowser Binary... ---${NC}"
         if wget -O "filebrowser" "${download_url}"; then
