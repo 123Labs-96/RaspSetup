@@ -4,7 +4,7 @@
 #
 # This script provides an interactive, menu‑driven installer for a variety
 # of utilities and services on a Raspberry Pi.  It builds on previous
-# versions (v4.7 and earlier) by simplifying the user interface,
+# versions (v3 and earlier) by simplifying the user interface,
 # improving error handling and board detection, replacing the Neofetch
 # option with Fastfetch, and providing more robust install routines for
 # Node.js, Pi‑Hole and AdGuard Home.  The script also exposes the
